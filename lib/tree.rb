@@ -43,7 +43,36 @@ class Tree
     return @root = insert_recursion(@root, key)
   end
 
+  def get_successor (curr)
+    curr = curr.right
+    while (curr != nil && curr.left != nil)
+      curr = curr.left
+    end
+    return curr
+  end
 
+  def delete_recursion (root, x)
+    return root if root == nil
+
+    if root.value > x
+      root.left = delete_recursion(root.left,x)
+    elsif root.value < x
+      root.right = delete_recursion(root.right,x)
+    else
+      return root.right if root.left == nil
+      return root.left if root.right == nil
+
+      succ = get_successor(root)
+      root.value = succ.value
+      root.right = delete_recursion(root.right, succ.value)
+    end
+
+    return root
+  end
+
+  def delete (key)
+    return @root = delete_recursion(@root, key)
+  end
 
 
 

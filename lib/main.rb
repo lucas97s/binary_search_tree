@@ -8,5 +8,9 @@ require_relative "tree.rb"
 
 trial = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
 trial.build_tree
+trial.pretty_print
 trial.insert(111)
+trial.pretty_print
+trial.delete(324)
+puts trial.root.value
 trial.pretty_print
