@@ -74,6 +74,100 @@ class Tree
     return @root = delete_recursion(@root, key)
   end
 
+  def find_recursion (root, key)
+
+    return "not found" if root == nil
+    return root if root.value == key
+
+    if root.value > key
+      root.left = find_recursion(root.left, key)
+    elsif root.value < key
+      root.right = find_recursion(root.right, key)
+    end
+
+
+  end
+
+  def find (key)
+    return find_recursion(@root,key)
+  end
+
+  def pre_order_recursion(root,result)
+    return nil if root == nil
+    result << root.value
+    pre_order_recursion(root.left, result)
+    pre_order_recursion(root.right, result)
+    return result
+  end
+
+  def pre_order
+    result = []
+    pre_order_recursion(@root, result)
+    if block_given?
+      result.each {|value| yield value}
+    else
+      return result
+    end
+  end
+
+  def in_order_recursion(root,result)
+    return nil if root == nil
+    in_order_recursion(root.left, result)
+    result << root.value
+    in_order_recursion(root.right, result)
+    return result
+  end
+  def in_order
+    result = []
+    in_order_recursion(@root, result)
+    if block_given?
+      result.each {|value| yield value}
+    else
+      return result
+    end
+  end
+
+
+  def post_order_recursion(root,result)
+    return nil if root == nil
+    post_order_recursion(root.left, result)
+    post_order_recursion(root.right, result)
+    result << root.value
+    return result
+  end
+  def post_order
+    result = []
+    post_order_recursion(@root, result)
+    if block_given?
+      result.each {|value| yield value}
+    else
+      return result
+    end
+  end
+
+
+
+  def level_order(root = @root)
+    queue = [root]
+    result = []
+
+    until queue.empty?
+      node = queue.shift
+
+      if block_given?
+        yield node.value
+      else
+        result << node.value
+      end
+      queue << node.left if node.left
+      queue << node.right if node.right
+
+    end
+    return result
+  end
+
+
+
 
 
   def pretty_print(node = @root, prefix = '', is_left = true)

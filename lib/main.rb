@@ -12,5 +12,10 @@ trial.pretty_print
 trial.insert(111)
 trial.pretty_print
 trial.delete(324)
-puts trial.root.value
 trial.pretty_print
+trial.level_order do |value|
+  p value
+end
+p trial.pre_order
+p trial.in_order
+p trial.post_order
