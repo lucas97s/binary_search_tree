@@ -4,6 +4,7 @@ class Tree
 
   def initialize(unique_array)
     @array = unique_array.uniq.sort
+    self.build_tree
   end
 
   def build_tree_recrusive(array, initial , last)
@@ -40,7 +41,7 @@ class Tree
   end
 
   def insert (key)
-    return @root = insert_recursion(@root, key)
+    @root = insert_recursion(@root, key)
   end
 
   def get_successor (curr)
@@ -164,6 +165,77 @@ class Tree
 
     end
     return result
+  end
+
+  def depth_recursive(root, key, dist = 0 )
+    return nil if root == nil
+
+    #check for condition
+    if root.value == key
+      return dist
+    elsif root.value < key
+      dist += 1
+      depth_recursive(root.right, key, dist)
+    elsif root.value > key
+      dist += 1
+      depth_recursive(root.left, key, dist)
+    end
+
+  end
+
+  def depth(key)
+    return depth_recursive(@root,key )
+  end
+
+  def height_recursive(root,key,dist)
+    return 0 if root == nil
+    left_height = height_recursive(root.left,key,dist)
+    right_height = height_recursive(root.right,key,dist)
+
+    result = [left_height,right_height].max + 1
+    if root.value == key
+      dist[0] = result - 1
+    end
+    return result
+  end
+
+  def height(key)
+    dist = []
+    height_recursive(@root, key,dist)
+    return dist[0]
+  end
+
+  def balanced_recursive(root,key,result)
+    return 0 if root == nil
+    store_left_right_values = []
+      store_left_right_values[0] = balanced_recursive(root.left,key,result)[0] + 1
+      store_left_right_values[1] = balanced_recursive(root.right,key,result)[1] + 1
+      difference = store_left_right_values[1] - store_left_right_values[0]
+
+    if root.value == key
+
+      result[0] = difference.abs
+    end
+    return store_left_right_values
+  end
+
+  def balanced?
+    self.level_order do |key|
+      result = []
+      balanced_recursive(@root,key,result)
+      p "Printing the values #{result[0]}"
+      if result[0] > 1
+        p "Printing the values #{result[0]}"
+        return false
+      end
+    end
+    return true
+
+  end
+
+  def rebalance
+    @array = self.level_order.uniq.sort
+    @root = self.build_tree
   end
 
 
